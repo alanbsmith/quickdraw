@@ -33,6 +33,12 @@ class API < Sinatra::Base
           "Invalid Query".to_json
         end
       end
+
+      get '/deal' do
+        content_type :json
+        @hand = get_cards
+        { cards: formatted_cards, value: @hand.evaluate }.to_json
+      end
     end
   end
 
@@ -40,6 +46,14 @@ class API < Sinatra::Base
 
   def formatted_cards
     @hand.faces.map.with_index { |face,index| "#{face} of #{@hand.suits[index]}" }
+  end
+
+  def get_cards
+    cards = (0..4).map { VALID_FACES.sample + VALID_SUITS.sample }
+    while cards.length != cards.uniq.length do
+      cards = cards.uniq.push(VALID_FACES.sample + VALID_SUITS.sample )
+    end
+    Hand.new(cards.join(' '))
   end
 
 end

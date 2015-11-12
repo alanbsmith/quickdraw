@@ -1,2 +1,5 @@
 *.DS_Store
-Gemfile.lock
+*npm-debug.log
+quickdraw_service/Gemfile.lock
+quickdraw-client/node_modules/
+quickdraw-client/public/app.js

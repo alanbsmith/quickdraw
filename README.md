@@ -36,11 +36,23 @@ clone the repo and run `bundle install`
 The CLI is designed to explain and faciliate the use of QuickDraw. To get it up and running, simply run `ruby quickdraw.rb` from the root of this directory. In it you'll find explanations of various hands, and you can try out multiple hands to see the results.
 
 ### USING THE API
-The API is a simple Sinatra controller with a single endpoint: `api/v1/cards`. This endpoint takes params: 'ad ac ah as 4c' and returns a JSON object if the query is valid. If the request is not valid it will return 'Invalid Query'.
+The API is a simple Sinatra controller with two endpoints: `api/v1/cards` and `api/v1/deal`. The `cards` endpoint takes params (e.g: 'ad ac ah as 4c') and returns a JSON object if the query is valid. If the request is not valid it will return 'Invalid Query'.
+
+The `deal` endpoint returns a randomly generated hand and the value of the hand. This endpoint is used by the client-side React app.
 
 This API is served by Rackup, so it runs on port: 9292. To fire up the API simply run `rackup`. This API also allows cross origin requests, so a client application could make AJAX requests to it.
 
-**EXAMPLE REQUEST:**
+### USING THE CLIENT APP
+The client-side application for QuickDraw is written in React! It's main function is to make AJAX requests to the QuickDraw API, display random hands and the value.
+
+To use the client app:
+- hop in the `quickdraw-client` directory
+- run `npm install`
+- _be sure to run the separateSinatra API as well (see USING THE API above)_
+- open your browser to 'localhost:8080'
+- clicking 'DEAL ME' will generate a hand of five cards.
+
+**EXAMPLE REQUEST TO THE 'CARDS' ENDPOINT:**
 `localhost:9292/api/v1/cards?ah as ac ad 3s`
 
 **EXAMPLE RESPONSE:**

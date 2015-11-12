@@ -42,6 +42,12 @@ class HandTest < Minitest::Test
     assert_equal 'Straight Flush (5,6,7,8,9 of Clubs)', hand.evaluate
   end
 
+  def test_it_can_evaluate_an_unordered_straight_flush
+    unordered_straight_flush = '9s 10s qs 8s js'
+    hand = Hand.new(unordered_straight_flush)
+    assert_equal 'Straight Flush (8,9,10,Jack,Queen of Spades)', hand.evaluate
+  end
+
   def test_it_can_evaluate_four_of_a_kind
     # Same 4 faces
     four_of_a_kind = 'Ah Ac Ad As 8h'
@@ -68,6 +74,12 @@ class HandTest < Minitest::Test
     straight = '2d 3c 4s 5d 6c'
     hand = Hand.new(straight)
     assert_equal 'Straight (2,3,4,5,6)', hand.evaluate
+  end
+
+  def test_it_can_evaluate_an_unordered_straight
+    unordered_straight_flush = '9d Ks Qc 10h Js'
+    hand = Hand.new(unordered_straight_flush)
+    assert_equal 'Straight (9,10,Jack,Queen,King)', hand.evaluate
   end
 
   def test_it_can_evaluate_three_of_a_kind

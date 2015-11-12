@@ -94,8 +94,10 @@ class Hand
   end
 
   def straight_flush
+    hash_array = @faces.map.with_index { |face, i| {'face' => face, 'value' => @values[i] } }
+    sorted_faces = hash_array.sort_by { |key| key['value'] }.map { |key| key['face'] }
     # displays formatted cards in the straight flush
-    "#{@faces.join(",")} of #{@suits[0]}"
+    "#{sorted_faces.join(",")} of #{@suits[0]}"
   end
 
   def flush
@@ -105,12 +107,15 @@ class Hand
 
   def straight?
     # determines the presence of a straight
-    @values.sort == (values[0]..values[4]).step.to_a
+    sorted_values = @values.sort
+    sorted_values == (sorted_values[0]..sorted_values[4]).step.to_a
   end
 
   def straight
     # displays formatted cards in the straight
-    "#{@faces.join(",")}"
+    hash_array = @faces.map.with_index { |face, i| {'face' => face, 'value' => @values[i] } }
+    sorted_faces = hash_array.sort_by { |key| key['value'] }.map { |key| key['face'] }
+    "#{sorted_faces.join(",")}"
   end
 
   def four_of_a_kind?
