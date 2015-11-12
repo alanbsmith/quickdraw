@@ -4,11 +4,14 @@
 QuickDraw is a poker hand evaluator built in Ruby! It's designed to use a special shorthand to make checking cards quick and easy.
 
 **EXAMPLE SHORTHAND**
-GIVEN THIS HAND OF CARDS:
-King of hearts, Jack of spades, 9 of clubs, 10 of hearts, 3 of diamonds
 
-THE CORRELATING SHORTHAND:
-kh js 9c 10h 3d
+Given this hand of cards:
+
+_King of hearts, Jack of spades, 9 of clubs, 10 of hearts, 3 of diamonds_
+
+The correlating shorthand:
+
+_kh js 9c 10h 3d_
 
 ### DIFFERENT TYPES OF POKER HANDS
 Below are the various types of poker hands (ranked in order)
@@ -32,11 +35,34 @@ clone the repo and run `bundle install`
 ### USING THE CLI
 The CLI is designed to explain and faciliate the use of QuickDraw. To get it up and running, simply run `ruby quickdraw.rb` from the root of this directory. In it you'll find explanations of various hands, and you can try out multiple hands to see the results.
 
-### TESTING
-The bulk of the tests tests are for `hand.rb`, where the majority of the logic lives. You'll probably notice that there are no 'sad path' tests for `hand.rb`. This is because `Hand` is just an internal receiving service, and therefore is only concerned with proper input. All validations are handled by the sending services (CLI) before `Hand` ever gets to them. This allows the CLI to be in charge of interacting with input and the internal service to be concerned with giving back the proper data. 
+### USING THE API
+The API is a simple Sinatra controller with a single endpoint: `api/v1/cards`. This endpoint takes params: 'ad ac ah as 4c' and returns a JSON object if the query is valid. If the request is not valid it will return 'Invalid Query'.
 
-The CLI tests are focused on ensuring the hand input is valid and all corner cases are covered. There are no 'integration' tests for the CLI.
+This API is served by Rackup, so it runs on port: 9292. To fire up the API simply run `rackup`. This API also allows cross origin requests, so a client application could make AJAX requests to it.
+
+**EXAMPLE REQUEST:**
+`localhost:9292/api/v1/cards?ah as ac ad 3s`
+
+**EXAMPLE RESPONSE:**
+```
+{
+  cards: [
+    "Ace of Hearts",
+    "Ace of Spades",
+    "Ace of Clubs",
+    "Ace of Diamonds",
+    "3 of Spades"
+  ],
+  value: "Four of a Kind (Aces)"
+}
+```
+
+### TESTING
+The bulk of the tests tests are for `hand.rb`, where the majority of the logic lives. You'll probably notice that there are no 'sad path' tests for `hand.rb`. This is because `Hand` is just an internal receiving service, and therefore is only concerned with proper input. All validations are handled by the Validator module which is used by the sending services (CLI and the API). The data is validated before `Hand` ever gets to it. This allows the CLI and API to be in charge of interacting with input and allows the internal service to be concerned with giving back the proper data. 
+
+The Validator tests are focused specifically on the module methods. The Validator is used by both the API and the CLI to ensure proper formatting before hitting the Hand service.
 
 **RUNNING THE TESTS**
+
 You can run `rake` from the root of this directory to run all the tests.
 

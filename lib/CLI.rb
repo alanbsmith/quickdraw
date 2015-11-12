@@ -1,6 +1,8 @@
 require_relative 'hand'
+require_relative 'validator'
 
 class CLI
+  include Validator
 
   def run
     welcome
@@ -75,7 +77,7 @@ class CLI
     puts "Please enter your five card hand."
     input = gets.chomp
     while input.chars[0] != 'q' do 
-      if input_valid?(input)
+      if valid?(input)
         puts Hand.new(input).evaluate
         repeat_menu
       else
@@ -100,31 +102,6 @@ class CLI
 
   def quit
     abort('Adios!')
-  end
-
-  private
-
-  def input_valid?(input)
-    @input = input
-    correct_number_of_cards? && no_duplicates? && valid_faces? && valid_suits?
-  end
-
-  def correct_number_of_cards?
-    @input.split.length == 5
-  end
-
-  def no_duplicates?
-    @input.upcase.split.uniq.length == 5
-  end
-
-  def valid_faces?
-    valid_faces = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
-    @input.upcase.split.all? {|card| valid_faces.include?(card.chomp(card[-1])) }
-  end
-
-  def valid_suits?
-    valid_suits = ["H","S","D","C"]
-    @input.split.all? {|card| valid_suits.include?(card[-1].upcase) }
   end
 
 end
